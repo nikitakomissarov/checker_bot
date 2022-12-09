@@ -14,6 +14,7 @@ def timehack(devman_token, url, timestamp, **response_json):
             response = requests.get(url, headers=headers)
             response.raise_for_status()
             response_json = response.json()
+            print(response_json)
             timestamp = str(response_json['timestamp_to_request'])
         except ReadTimeout:
             pass
