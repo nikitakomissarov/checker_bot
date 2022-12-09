@@ -1,9 +1,0 @@
-To use the code you have to:
-1. Check requirements.txt and be sure that your virtenv includes each from needed modules.
-2. Take your own tokens from Telegram and Devman, then insert they into .env like:
-DM_TOKEN = '****'
-BOT_TOKEN = '****'.
-But do not forget to create .env on you local machine first.
-
-Then write something to your bot. After it receive any message from you, it'll be able to retrieve your 'chat_id' and use it in the code automatically.
-Cheers. 
