@@ -22,13 +22,11 @@ def main():
     while True:
         try:
             headers = {"Authorization": DEVMAN_TOKEN, "timestamp_to_request": timestamp}
-            print(headers)
             response = requests.get(URL, headers=headers)
             response.raise_for_status()
             filtered_response = response.json()
             if filtered_response['status'] != 'found':
                 timestamp = str(filtered_response['timestamp_to_request'])
-                print(timestamp)
             else:
                 message = (
                     f'Преподаватель проверил работу {filtered_response["lesson_title"]}, она {"принята." if filtered_response["is_negative"] == "False" else "не принята, исправьте ошибки."} Ссылка на урок: {filtered_response["lesson_url"]}')
