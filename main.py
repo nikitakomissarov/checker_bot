@@ -24,14 +24,14 @@ def main():
             headers = {"Authorization": DEVMAN_TOKEN, "timestamp_to_request": timestamp}
             response = requests.get(URL, headers=headers)
             response.raise_for_status()
-            response_dict = response.json()
-            if response_dict['status'] != 'found':
-                timestamp = str(response_dict['timestamp_to_request'])
+            lesson_result = response.json()
+            if lesson_result['status'] != 'found':
+                timestamp = str(lesson_result['timestamp_to_request'])
             else:
                 message = (
-                    f'Преподаватель проверил работу {response_dict["lesson_title"]},'
-                    f'она {"принята." if response_dict["is_negative"] == "False" else "не принята, исправьте ошибки."}'
-                    f'Ссылка на урок: {response_dict["lesson_url"]}'
+                    f'Преподаватель проверил работу {lesson_result["lesson_title"]},'
+                    f'она {"принята." if lesson_result["is_negative"] == "False" else "не принята, исправьте ошибки."}'
+                    f'Ссылка на урок: {lesson_result["lesson_url"]}'
                 )
                 bot.send_message(text=message, chat_id=CHAT_ID)
         except ReadTimeout:
