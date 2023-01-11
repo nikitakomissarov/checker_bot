@@ -6,7 +6,7 @@ from requests.exceptions import ReadTimeout
 from requests.exceptions import ConnectionError
 import time
 
-config = dotenv_values('env.txt')
+config = dotenv_values('.env')
 
 DEVMAN_TOKEN = config['DEVMAN_TOKEN']
 TELEGRAM_TOKEN = config['TELEGRAM_TOKEN']
