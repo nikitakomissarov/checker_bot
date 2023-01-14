@@ -5,8 +5,10 @@ from requests.exceptions import ConnectTimeout
 from requests.exceptions import ReadTimeout
 from requests.exceptions import ConnectionError
 import time
+import logging
 
 config = dotenv_values('.env')
+logging.basicConfig(level=logging.INFO)
 
 DEVMAN_TOKEN = config['DEVMAN_TOKEN']
 TELEGRAM_TOKEN = config['TELEGRAM_TOKEN']
@@ -16,6 +18,7 @@ URL = 'https://dvmn.org/api/long_polling/'
 def main():
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     greet_message = f"The bot's starting, your chat id {CHAT_ID}"
+    logging.info(greet_message)
     bot.send_message(text=greet_message, chat_id=CHAT_ID)
     timestamp = None
 
