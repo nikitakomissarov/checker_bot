@@ -27,10 +27,10 @@ logger.addHandler(handler)
 
 class TelegramLogsHandler(logging.Handler):
 
-    def __init__(self, bot, chat_id):
+    def __init__(self, chat_id):
         super().__init__()
         self.chat_id = chat_id
-        self.tg_bot = bot
+        self.tg_bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
     def emit(self, record):
         log_entry = self.format(record)
@@ -41,7 +41,6 @@ def main():
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     timestamp = None
 
-    logger.addHandler(TelegramLogsHandler(bot, CHAT_ID))
     logger.info(greet_message)
 
     while True:
@@ -69,4 +68,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logger.addHandler(TelegramLogsHandler(CHAT_ID))
     main()
