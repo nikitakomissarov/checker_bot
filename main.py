@@ -6,21 +6,43 @@ from requests.exceptions import ReadTimeout
 from requests.exceptions import ConnectionError
 import time
 import logging
+from logging.handlers import RotatingFileHandler
 
 config = dotenv_values('.env')
-logging.basicConfig(level=logging.INFO)
 
 DEVMAN_TOKEN = config['DEVMAN_TOKEN']
 TELEGRAM_TOKEN = config['TELEGRAM_TOKEN']
 CHAT_ID = config['CHAT_ID']
 URL = 'https://dvmn.org/api/long_polling/'
 
+greet_message = f"The bot's been started, your chat id {CHAT_ID}"
+
+logger = logging.getLogger("INFOLOGGER")
+logger.setLevel(logging.INFO)
+handler = RotatingFileHandler("app.log", maxBytes=5000, backupCount=1)
+handler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(handler_format)
+logger.addHandler(handler)
+
+
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 def main():
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
-    greet_message = f"The bot's starting, your chat id {CHAT_ID}"
-    logging.info(greet_message)
-    bot.send_message(text=greet_message, chat_id=CHAT_ID)
     timestamp = None
+
+    logger.addHandler(TelegramLogsHandler(bot, CHAT_ID))
+    logger.info(greet_message)
 
     while True:
         try:
@@ -44,6 +66,7 @@ def main():
         except ConnectionError:
             time.sleep(5)
             pass
+
 
 if __name__ == "__main__":
     main()
