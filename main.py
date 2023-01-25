@@ -20,26 +20,20 @@ greet_message = f"The bot's been started, your chat id {CHAT_ID}"
 handler = TimedRotatingFileHandler("app.log", when='D', backupCount=30)
 handler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(handler_format)
-logger.addHandler(handler)
 
+loggerinfo = logging.getLogger("LOGGERINFO")
+loggerinfo.setLevel(logging.INFO)
+loggerinfo.addHandler(handler)
 
-class TelegramLogsHandler(logging.Handler):
-
-    def __init__(self, chat_id):
-        super().__init__()
-        self.chat_id = chat_id
-        self.tg_bot = telegram.Bot(token=TELEGRAM_TOKEN)
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+loggererror = logging.getLogger("LOGGERERROR")
+loggererror.setLevel(logging.ERROR)
+loggererror.addHandler(handler)
 
 
 def main():
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     timestamp = None
-
-    logger.info(greet_message)
+    loggerinfo.info(greet_message)
 
     while True:
         try:
@@ -65,6 +59,20 @@ def main():
             pass
 
 
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = telegram.Bot(token=TELEGRAM_TOKEN)
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 if __name__ == "__main__":
-    logger.addHandler(TelegramLogsHandler(CHAT_ID))
+    loggererror.addHandler(TelegramLogsHandler(CHAT_ID))
+    loggerinfo.addHandler(TelegramLogsHandler(CHAT_ID))
     main()
+
