@@ -6,7 +6,7 @@ from requests.exceptions import ReadTimeout
 from requests.exceptions import ConnectionError
 import time
 import logging
-from logging.handlers import RotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler
 
 config = dotenv_values('.env')
 
@@ -17,9 +17,7 @@ URL = 'https://dvmn.org/api/long_polling/'
 
 greet_message = f"The bot's been started, your chat id {CHAT_ID}"
 
-logger = logging.getLogger("INFOLOGGER")
-logger.setLevel(logging.INFO)
-handler = RotatingFileHandler("app.log", maxBytes=5000, backupCount=1)
+handler = TimedRotatingFileHandler("app.log", when='D', backupCount=30)
 handler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(handler_format)
 logger.addHandler(handler)
