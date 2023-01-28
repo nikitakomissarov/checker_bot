@@ -16,24 +16,22 @@ TG_CHAT_ID = config['TG_CHAT_ID']
 URL = 'https://dvmn.org/api/long_polling/'
 GREET_MESSAGE = f"The bot's been started, your chat id {TG_CHAT_ID}"
 
+logger_info = logging.getLogger('loggerinfo')
+logger_error = logging.getLogger("loggererror")
 handler = TimedRotatingFileHandler("app.log", when='D', backupCount=30)
 handler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(handler_format)
-
-loggerinfo = logging.getLogger("LOGGERINFO")
-loggerinfo.setLevel(logging.INFO)
-loggerinfo.addHandler(handler)
-
-loggererror = logging.getLogger("LOGGERERROR")
-loggererror.setLevel(logging.ERROR)
-loggererror.addHandler(handler)
-
 
 def main():
     bot = telegram.Bot(token=TG_TOKEN)
     timestamp = None
-    loggerinfo.info(greet_message)
+    handler.setFormatter(handler_format)
+
+    logger_info.setLevel(logging.INFO)
+    logger_info.addHandler(handler)
     logger_info.addHandler(TelegramLogsHandler(TG_CHAT_ID))
+
+    logger_error.setLevel(logging.ERROR)
+    logger_error.addHandler(handler)
     logger_error.addHandler(TelegramLogsHandler(TG_CHAT_ID))
 
     while True:
@@ -71,9 +69,6 @@ class TelegramLogsHandler(logging.Handler):
         log_entry = self.format(record)
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
-
 if __name__ == "__main__":
-    loggererror.addHandler(TelegramLogsHandler(CHAT_ID))
-    loggerinfo.addHandler(TelegramLogsHandler(CHAT_ID))
     main()
 
