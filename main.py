@@ -12,7 +12,7 @@ from textwrap import dedent
 config = dotenv_values('.env')
 
 DEVMAN_TOKEN = config['DEVMAN_TOKEN']
-TG_TOKEN = config['TELEGRAM_TOKEN']
+TG_TOKEN = config['TG_TOKEN']
 TG_CHAT_ID = config['TG_CHAT_ID']
 URL = 'https://dvmn.org/api/long_polling/'
 GREET_MESSAGE = f"The bot's been started, your chat id {TG_CHAT_ID}"
