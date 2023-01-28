@@ -51,13 +51,10 @@ def main():
  Ссылка на урок: {lesson_result["lesson_url"]}\ '''))
                 bot.send_message(text=message, chat_id=TG_CHAT_ID)
         except (ReadTimeout, ConnectionError, Exception) as err:
-            loggererror.error(err, exc_info=True)
-            pass
+            logger_error.exception(err)
         except ConnectTimeout as err:
-            loggererror.error(err, exc_info=True)
+            logger_error.exception(err)
             time.sleep(5)
-            pass
-
 
 class TelegramLogsHandler(logging.Handler):
 
