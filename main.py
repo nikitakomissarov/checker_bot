@@ -46,9 +46,9 @@ def main():
                 timestamp = str(lesson_result['timestamp_to_request'])
             else:
                 message = repr(dedent(f''' Преподаватель проверил работу {lesson_result["lesson_title"]},\
- она {"принята." if lesson_result["is_negative"] == "False" 
- else "не принята, исправьте ошибки."}\
- Ссылка на урок: {lesson_result["lesson_url"]}\ '''))
+                она {"принята." if lesson_result["is_negative"] == "False"
+                else "не принята, исправьте ошибки."}\
+                Ссылка на урок: {lesson_result["lesson_url"]}\ '''))
                 bot.send_message(text=message, chat_id=TG_CHAT_ID)
         except (ReadTimeout, ConnectionError, Exception) as err:
             logger_error.exception(err)
