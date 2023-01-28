@@ -19,7 +19,7 @@ GREET_MESSAGE = f"The bot's been started, your chat id {TG_CHAT_ID}"
 
 logger_info = logging.getLogger('loggerinfo')
 logger_error = logging.getLogger("loggererror")
-handler = TimedRotatingFileHandler("app.log", when='D', backupCount=30)
+handler = TimedRotatingFileHandler("app.log", when='D', interval=30, backupCount=1)
 handler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def main():
