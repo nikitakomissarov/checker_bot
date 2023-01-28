@@ -12,9 +12,9 @@ To use the code below you have to:
 
 DEVMAN_TOKEN = '****'
 
-TELEGRAM_TOKEN = '****'
+TG_TOKEN = '****'
 
-CHAT_ID = ****
+TG_CHAT_ID = ****
 
 
 But DO NOT FORGET to create .env on you local machine first.
@@ -40,6 +40,6 @@ Traceback (most recent call last):
 KeyError: 'DEVMAN_TOKEN' 
 ```
 
-That means that you still forgot to create your own .env file for DEVMAN_TOKEN, TELEGRAM_TOKEN and CHAT_ID.
+That means that you still forgot to create your own .env file for DEVMAN_TOKEN, TG_TOKEN and TG_CHAT_ID.
 
 
