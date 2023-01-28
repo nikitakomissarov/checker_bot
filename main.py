@@ -11,11 +11,10 @@ from logging.handlers import TimedRotatingFileHandler
 config = dotenv_values('.env')
 
 DEVMAN_TOKEN = config['DEVMAN_TOKEN']
-TELEGRAM_TOKEN = config['TELEGRAM_TOKEN']
-CHAT_ID = config['CHAT_ID']
+TG_TOKEN = config['TELEGRAM_TOKEN']
+TG_CHAT_ID = config['TG_CHAT_ID']
 URL = 'https://dvmn.org/api/long_polling/'
-
-greet_message = f"The bot's been started, your chat id {CHAT_ID}"
+GREET_MESSAGE = f"The bot's been started, your chat id {TG_CHAT_ID}"
 
 handler = TimedRotatingFileHandler("app.log", when='D', backupCount=30)
 handler_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -31,9 +30,11 @@ loggererror.addHandler(handler)
 
 
 def main():
-    bot = telegram.Bot(token=TELEGRAM_TOKEN)
+    bot = telegram.Bot(token=TG_TOKEN)
     timestamp = None
     loggerinfo.info(greet_message)
+    logger_info.addHandler(TelegramLogsHandler(TG_CHAT_ID))
+    logger_error.addHandler(TelegramLogsHandler(TG_CHAT_ID))
 
     while True:
         try:
@@ -49,7 +50,7 @@ def main():
                     f'она {"принята." if lesson_result["is_negative"] == "False" else "не принята, исправьте ошибки."}'
                     f'Ссылка на урок: {lesson_result["lesson_url"]}'
                 )
-                bot.send_message(text=message, chat_id=CHAT_ID)
+                bot.send_message(text=message, chat_id=TG_CHAT_ID)
         except (ReadTimeout, ConnectionError, Exception) as err:
             loggererror.error(err, exc_info=True)
             pass
@@ -64,7 +65,7 @@ class TelegramLogsHandler(logging.Handler):
     def __init__(self, chat_id):
         super().__init__()
         self.chat_id = chat_id
-        self.tg_bot = telegram.Bot(token=TELEGRAM_TOKEN)
+        self.tg_bot = telegram.Bot(token=TG_TOKEN)
 
     def emit(self, record):
         log_entry = self.format(record)
