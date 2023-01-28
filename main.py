@@ -42,10 +42,10 @@ def main():
             response = requests.get(URL, headers=headers)
             response.raise_for_status()
             lesson_result = response.json()
-            logger_info.info(f'Структура ответа: {lesson_result}')
             if lesson_result['status'] != 'found':
                 timestamp = str(lesson_result['timestamp_to_request'])
             else:
+                logger_info.info(f'Структура ответа: {lesson_result}')
                 message = repr(dedent(f''' Преподаватель проверил работу {lesson_result["lesson_title"]},\
                 она {"принята." if lesson_result["is_negative"] == "False"
                 else "не принята, исправьте ошибки."}\
