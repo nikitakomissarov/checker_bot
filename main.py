@@ -35,6 +35,7 @@ def main():
     logger_error.addHandler(handler)
     logger_error.addHandler(TelegramLogsHandler(TG_CHAT_ID))
 
+    logger_info.info(GREET_MESSAGE)
     while True:
         try:
             headers = {"Authorization": DEVMAN_TOKEN, "timestamp_to_request": timestamp}
