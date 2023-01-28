@@ -7,6 +7,7 @@ from requests.exceptions import ConnectionError
 import time
 import logging
 from logging.handlers import TimedRotatingFileHandler
+from textwrap import dedent
 
 config = dotenv_values('.env')
 
@@ -40,14 +41,14 @@ def main():
             response = requests.get(URL, headers=headers)
             response.raise_for_status()
             lesson_result = response.json()
+            logger_info.info(f'Структура ответа: {lesson_result}')
             if lesson_result['status'] != 'found':
                 timestamp = str(lesson_result['timestamp_to_request'])
             else:
-                message = (
-                    f'Преподаватель проверил работу {lesson_result["lesson_title"]},'
-                    f'она {"принята." if lesson_result["is_negative"] == "False" else "не принята, исправьте ошибки."}'
-                    f'Ссылка на урок: {lesson_result["lesson_url"]}'
-                )
+                message = repr(dedent(f''' Преподаватель проверил работу {lesson_result["lesson_title"]},\
+ она {"принята." if lesson_result["is_negative"] == "False" 
+ else "не принята, исправьте ошибки."}\
+ Ссылка на урок: {lesson_result["lesson_url"]}\ '''))
                 bot.send_message(text=message, chat_id=TG_CHAT_ID)
         except (ReadTimeout, ConnectionError, Exception) as err:
             loggererror.error(err, exc_info=True)
