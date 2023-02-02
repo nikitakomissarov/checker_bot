@@ -36,6 +36,7 @@ def main():
     logger_error.addHandler(TelegramLogsHandler(TG_CHAT_ID))
 
     logger_info.info(GREET_MESSAGE)
+
     while True:
         try:
             headers = {"Authorization": DEVMAN_TOKEN, "timestamp_to_request": timestamp}
@@ -45,11 +46,11 @@ def main():
             if lesson_result['status'] != 'found':
                 timestamp = str(lesson_result['timestamp_to_request'])
             else:
-                logger_info.info(f'Структура ответа: {lesson_result}')
-                message = repr(dedent(f''' Преподаватель проверил работу {lesson_result["lesson_title"]},\
-                она {"принята." if lesson_result["is_negative"] == "False"
-                else "не принята, исправьте ошибки."}\
-                Ссылка на урок: {lesson_result["lesson_url"]}\ '''))
+                message = repr(dedent
+                    (f''' Преподаватель проверил работу {lesson_result['new_attempts'][0]['lesson_title']},\
+ она {"принята." if lesson_result['new_attempts'][0]['is_negative'] == False 
+                    else "не принята, исправьте ошибки."} \
+                    Ccылка на урок: {lesson_result['new_attempts'][0]['lesson_url']}'''))
                 bot.send_message(text=message, chat_id=TG_CHAT_ID)
         except (ReadTimeout, ConnectionError, Exception) as err:
             logger_error.exception(err)
